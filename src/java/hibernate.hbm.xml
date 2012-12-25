@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="domain">
+     
+    <!--Companies-->
+    <class name="Companies" table="companies">        
+        <id name="id" column="id" type="integer">
+            <generator class="increment"/>
+        </id>        
+        <property name="companyAddress" column="company_address" type="string"/>
+        <property name="companyName" column="company_name" not-null="true" type="string"/>
+        <property name="companyTelephone" column="company_telephone" type="integer"/>     
+        <set name="contactsSet" table="contacts" fetch="select" lazy="false" >
+            <key column="company_id"/>
+            <one-to-many class="Contacts"/>
+        </set>   
+    </class>
+    
+    <!--Users-->
+    <class name="Users" table="users">
+        <id name="id" column="id" type="integer">
+            <generator class="increment"/>
+        </id>
+        <property name="login" column="login" not-null="true"/>
+        <property name="password" column="password" not-null="true"/>
+        <property name="privilege" column="privilege" type="integer" not-null="true"/>
+    </class>
+    
+    <!--Deals-->
+    <class name="Deals" table="deals">
+        <id name="id" column="id" type="integer">
+            <generator class="increment"/>
+        </id>
+        <property name="responsible" column="responsible" type="string" not-null="true"/>
+        <property name="dealsTag" column="deals_tag" type="string"/>
+        <property name="dealsType" column="deals_type" type="string" not-null="true"/>
+        <property name="money" column="money" type="integer" not-null="true"/>
+        <property name="dealsName" column="deals_name" type="string"/>
+        <set name="contactsSet" table="contacts" fetch="select" lazy="false" >
+            <key column="deals_id"/>
+            <one-to-many class="Contacts"/>
+        </set>   
+        <set name="tasksSet" table="tasks" fetch="select" lazy="false" >
+            <key column="deals_id"/>
+            <one-to-many class="Tasks"/>
+        </set>   
+    </class>
+    
+    <!--Contacts-->
+    <class name="Contacts" table="contacts">
+        <id name="id" column="id" type="integer">
+            <generator class="increment"/>
+        </id>
+        <property name="contactsAddress" column="contacts_address" type="string"/>
+        <property name="responsible" column="responsible" type="string"/>
+        <property name="contactsEmail" column="contacts_email" type="string"/>
+        <property name="contactsTelephon" column="contacts_telephon" type="integer"/>
+        <property name="contactsTags" column="contacts_tags" type="string"/>
+        <property name="contactsNote" column="contacts_note" type="string"/>
+        <property name="contactsName" column="contacts_name" type="string" not-null="true"/>
+        <property name="contactsPost" column="contacts_post" type="string"/>
+        <many-to-one name="companyId" class="Companies" fetch="select" lazy="false">
+            <column name="company_id" not-null="false"/>
+        </many-to-one>
+        <many-to-one name="dealsId" class="Deals" fetch="select" lazy="false">
+            <column name="deals_id" not-null="false"/>
+        </many-to-one>
+    </class>
+    
+    <!--Tasks-->
+    <class name="Tasks" table="tasks">
+        <id name="id" column="id" type="integer">
+            <generator class="increment"/>
+        </id>    
+        <property name="autor" column="autor" type="string" not-null="true"/>
+        <property name="responsible" column="responsible" type="string" not-null="true"/>
+        <property name="tasksDate" column="tasks_date" type="date"/>
+        <property name="tasksTime" column="tasks_time" type="time"/>
+        <property name="tasksType" column="tasks_type" type="string" not-null="true"/>
+        <property name="tasksText" column="tasks_text" type="string"/>
+        <property name="status" column="status" type="string" not-null="true"/>
+        <property name="tasksName" column="tasks_name" type="string" not-null="true"/>
+        <many-to-one name="dealsId" class="Deals" fetch="select" lazy="false">
+            <column name="deals_id" not-null="false"/>
+        </many-to-one>
+        <many-to-one name="contactsId" class="Contacts" fetch="select" lazy="false">
+            <column name="contacts_id" not-null="false"/>
+        </many-to-one>
+    </class>
+    
+    <!--Events-->
+    <class name="Events" table="events">
+        <id name="id" column="id" type="integer">
+            <generator class="increment"/>
+        </id>
+        <property name="eventsDate" column="events_date" type="date"/>
+        <property name="eventsText" column="events_text" type="string"/>
+        <property name="eventsTime" column="events_time" type="time"/>
+        <many-to-one name="tasksId" class="Tasks" fetch="select" lazy="false">
+            <column name="tasks_id" not-null="false"/>
+        </many-to-one>
+        <many-to-one name="dealsId" class="Deals" fetch="select" lazy="false">
+            <column name="deals_id" not-null="false"/>
+        </many-to-one>
+        <many-to-one name="contaktsId" class="Contacts" fetch="select" lazy="false">
+            <column name="contakts_id" not-null="false"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

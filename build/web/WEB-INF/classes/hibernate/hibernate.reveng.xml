@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="crm" match-schema="public"/>
+  <table-filter match-name="TASKS"/>
+  <table-filter match-name="DEALS"/>
+  <table-filter match-name="CONTACTS"/>
+  <table-filter match-name="EVENTS"/>
+  <table-filter match-name="COMPANIES"/>
+  <table-filter match-name="USERS"/>
+</hibernate-reverse-engineering>
