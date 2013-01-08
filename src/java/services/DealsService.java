@@ -14,6 +14,7 @@ import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -42,6 +43,18 @@ public class DealsService extends AbstractService<Deals> {
         Session session = HibernateUtil.getSessionFactory().openSession(); 
         List list =  session.createCriteria(Deals.class)
                 .add(Restrictions.eq("dealsType", type))
+                .list();
+        session.close();
+        
+        return list; 
+    }
+    
+    @WebMethod(operationName = "getDealsByTag")
+    public List<Deals> getDealsByTag(String tag)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession(); 
+        List list =  session.createCriteria(Deals.class)
+                .add(Restrictions.eq("dealsTag", tag))
                 .list();
         session.close();
         
@@ -79,7 +92,44 @@ public class DealsService extends AbstractService<Deals> {
         session.close();
         return deal;
     }
-        
+    
+    @WebMethod(operationName = "getDealsWhereNameLike")
+    public List<Deals> getDealsWhereNameLike(String name)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List <Deals> list = session.createCriteria(Deals.class)
+                .add(Restrictions.like("dealsName", name, MatchMode.ANYWHERE ).ignoreCase())
+                .list();
+        session.close();
+        return list;
+    }
+    
+    @WebMethod(operationName = "getDealsWithoutTasks")
+    public List<Deals> getDealsWithoutTasks()
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List <Deals> list = session.createCriteria(Deals.class)
+                .add(Restrictions.isNull("tasksSet"))
+                .list();
+        session.close();
+        return list;
+    }
+    
+    @WebMethod(operationName = "getOpenedDeals")
+    public List<Deals> getOpenedDeals()
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List <Deals> list = session.createCriteria(Deals.class)
+                .add( Restrictions.and( 
+                            Restrictions.ne("dealsType", "success"), 
+                            Restrictions.ne("dealsType", "failure")
+                                    )
+                    )
+                .list();
+        session.close();
+        return list;
+    }
+    
     @WebMethod(operationName = "getDealsByID")
     public Deals getDealById(int id)
     {

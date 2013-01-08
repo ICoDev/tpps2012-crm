@@ -4,6 +4,9 @@
     Author     : KC
 --%>
 
+<%@page import="domain.Events"%>
+<%@page import="java.util.List"%>
+<%@page import="java.io.ObjectInputStream"%>
 <%@page import="services.UsersService"%>
 <%@page import="services.EventsService"%>
 <%@page import="views.EventsView"%>
@@ -23,7 +26,7 @@
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    ;<![endif]-->
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../assets/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
@@ -74,13 +77,13 @@
         <div class="span3">
           <p class="lead">Последние изменения</p>
           <ul class="nav nav-pills nav-stacked">
-              <li class="active"><a href="#">Все</a></li>
-              <li><a href="#">За последние 3 дня</a></li>
-              <li><a href="#">За последнюю неделю</a></li>
+              <li class="active"><a href="events.jsp">Все</a></li>
+              <li><a href="events.jsp?time=last3days">За последние 3 дня</a></li>
+              <li><a href="events.jsp?time=lastweek">За последнюю неделю</a></li>
           </ul>
-<form class="form-inline!">
+    <form class="form-inline!" action="FilterEvents">
       <label>Период</label>
-      <select class="input-block-level">
+      <select class="input-block-level" name="period">
             <option>За все время</option>
             <option>За сегодня</option>
             <option>За 3 дня</option>
@@ -88,34 +91,19 @@
             <option>За месяц</option>
             <option>За полгода</option>
       </select>
-<!--  <h5>Тип события</h5>
-  <label class="checkbox"><i class="icon-pencil"></i>
-    <input type="checkbox" value="">Новое примечание
-  </label>
-  <label class="checkbox"><i class="icon-fire"></i>
-    <input type="checkbox" value="">Новая сделка
-  </label>
-  <label class="checkbox"><i class="icon-user"></i>
-    <input type="checkbox" value="">Новый контакт
-  </label>
-  <label class="checkbox"><i class="icon-cog"></i>
-    <input type="checkbox" value="">Изменен статус сделки
-  </label>
-  <label class="checkbox"><i class="icon-envelope"></i>
-    <input type="checkbox" value="">Новое письмо
-  </label>-->
+      
   <h5>Объект события</h5>
   <label class="checkbox"><i class="icon-fire"></i>
-    <input type="checkbox" value="">Сделка
+      <input type="checkbox" value="true" name="deal">Сделка
   </label>
   <label class="checkbox"><i class="icon-user"></i>
-    <input type="checkbox" value="">Контакт
+    <input type="checkbox" value="true" name="contact">Контакт
   </label>
   <label class="checkbox"><i class="icon-cog"></i>
-    <input type="checkbox" value="">Задача
+    <input type="checkbox" value="true" name="task">Задача
   </label>
   <label class="checkbox">
-    <input type="checkbox" value="">Нет обьекта
+    <input type="checkbox" value="true" name="noObject">Нет обьекта
   </label>
   <br/>
   <!--<h5>Инициатор</h5>
@@ -131,20 +119,46 @@
 
         </div>
         <div class="span9">
-
-<table class="table">
-              <thead>
-                <tr>
-                  <th>Дата / Время</th>
-                  <th>Объект</th>
-                  <th>Событие</th>
-                </tr>
-              </thead>
+            
+            <%
+            //Have some parameters
+            if ( request.getParameter("time") != null )
+            {
+                //Last 3 days href was clicked
+                if ( request.getParameter("time").equals("last3days") )
+                {
+                    List<Events> list = eventsService.getEventsForLastNDays(3);
+                    if ( list.isEmpty() )
+                    {
+                        out.println("<b>Последние 3 дня ничего не происходило...</b>");
+                    }
+                    else
+                    {
+                        out.println( EventsView.getEventsTable( list ) );
+                    }
+                }
+                //Last 7 days href was clicked
+                else if ( request.getParameter("time").equals("lastweek") )
+                {
+                    List<Events> list = eventsService.getEventsForLastNDays(7);
+                    if ( list.isEmpty() )
+                    {
+                        out.println("<b>Последние 7 дней ничего не происходило...</b>");
+                    }
+                    else
+                    {
+                        out.println( EventsView.getEventsTable( list ) );
+                    }
+                }
+            }
+            //No parameters, or some shit
+            else
+            {
+                out.println(EventsView.getEventsTable( eventsService.findAll() ));
+            }
+            %>
+              <%--<%=EventsView.getEventsTable( eventsService.findAll() )%>--%>
               
-              <%=EventsView.getEventsTable( eventsService.findAll() )%>
-              
-            </table>
-
        </div>
       </div>
 

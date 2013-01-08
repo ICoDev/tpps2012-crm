@@ -7,12 +7,14 @@ package services;
 import com.sun.xml.ws.api.tx.at.Transactional;
 import domain.Contacts;
 import hibernate.HibernateUtil;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import util.EntityManagerWrapper;
 
 /**
  *
@@ -44,6 +46,46 @@ public class ContactsService extends AbstractService<Contacts> {
         session.close();
         return contact;
     } 
+    
+    @WebMethod(operationName = "getContactsWhereNameLike")
+    public List<Contacts> getContactsWhereNameLike(String name)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List <Contacts> list = session.createCriteria(Contacts.class)
+                .add(Restrictions.like("contactsName", name, MatchMode.ANYWHERE ).ignoreCase())
+                .list();
+        session.close();
+        return list;
+    }
+    
+    @WebMethod(operationName = "getContactsWithoutTasks")
+    public List<Contacts> getContactsWithoutTasks()
+    {
+        List <Contacts> list = super.findAll();        
+        Iterator<Contacts> iterator = list.iterator();
+        
+        List<Contacts> contactsWithoutTasks = new LinkedList<Contacts>();
+        
+        while ( iterator.hasNext() )
+        {
+            Contacts contact = iterator.next();
+            
+            if ( contact.getDealsId() != null )
+            {
+                if ( !contact.getDealsId().getTasksSet().isEmpty() )
+                {
+                    continue;
+                }
+                iterator.remove();
+            }
+            else 
+            {
+                iterator.remove();
+            }
+        }
+        
+        return list;
+    }
     
     @WebMethod(operationName = "getContactById")
     public Contacts getContactById(int id)

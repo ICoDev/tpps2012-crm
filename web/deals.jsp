@@ -73,25 +73,25 @@
         <div class="span3">
           <p class="lead">Сделки</p>
           <p><a href="add-deal.jsp" class="btn btn-block" target="_blank">Добавить сделку</a></p>
-          <form>
+          <form action="SearchDeals">
           <div class="input-append">
-            <input type="text" placeholder="Поиск сделки">
+            <input type="text" placeholder="Поиск сделки" name="name">
             <button class="btn btn-primary" type="submit"><i class="icon-search icon-white"></i></button>
           </div>
           </form>
           <ul class="nav nav-pills nav-stacked">
-              <li class="active"><a href="#">Открытые сделки</a></li>
-              <li><a href="#">Только мои сделки</a></li>
-              <li><a href="#">Успешно завершенные</a></li>
-              <li><a href="#">Нереализованные сделки</a></li>
-              <li><a href="#">Сделки без задач</a></li>
-              <li><a href="#">Сделки c просроченными задачами</a></li>
+              <li class="active"><a href="deals.jsp?status=opened">Открытые сделки</a></li>
+              <li><a href="deals.jsp?status=my">Только мои сделки</a></li>
+              <li><a href="deals.jsp?status=suxes">Успешно завершенные</a></li>
+              <li><a href="deals.jsp?status=failed">Нереализованные сделки</a></li>
+              <li><a href="deals.jsp?status=without_tasks">Сделки без задач</a></li>
+              <!--<li><a href="#">Сделки c просроченными задачами</a></li>-->
           </ul>
           <h5>Теги</h5>
           
           <%=DealsView.getTags( dealsService.findAll() )%>
           
-        <h5>Фильтр по сделкам</h5>
+<!--        <h5>Фильтр по сделкам</h5>
         <form>
         <select class="input-block-level">
             <option> </option>
@@ -106,26 +106,26 @@
             <option>За месяц</option>
             <option>За полгода</option>
           </select>
-        </form>
-<form>
+        </form>-->
+<form action="FilterDeals">
   <h5>Статус сделки</h5>
   <label class="checkbox">
-    <input type="checkbox" value=""><span class="label label-info">Первичный контакт</span>
+      <input type="checkbox" value="true" name="primaryContract"><span class="label label-info">Первичный контакт</span>
   </label>
   <label class="checkbox">
-    <input type="checkbox" value=""><span class="label label-warning">Переговоры</span>
+    <input type="checkbox" value="true" name="talk"><span class="label label-warning">Переговоры</span>
   </label>
   <label class="checkbox">
-    <input type="checkbox" value=""><span class="label label-inverse">Принимают решение</span>
+    <input type="checkbox" value="true" name="decide"><span class="label label-inverse">Принимают решение</span>
   </label>
   <label class="checkbox">
-    <input type="checkbox" value=""><span class="label label-important">Согласование договора</span>
+    <input type="checkbox" value="true" name="negotiation"><span class="label label-important">Согласование договора</span>
   </label>
   <label class="checkbox">
-    <input type="checkbox" value=""><span class="label label-success">Успешно реализовано</span>
+    <input type="checkbox" value="true" name="suxes"><span class="label label-success">Успешно реализовано</span>
   </label>
   <label class="checkbox">
-    <input type="checkbox" value=""><span class="label">Закрыто и не реализовано</span>
+    <input type="checkbox" value="true" name="failed"><span class="label">Закрыто и не реализовано</span>
   </label>
   <h5>Ответственный</h5>
   
@@ -138,20 +138,51 @@
 </form>
         </div>
         <div class="span9">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Название сделки</th>
-                  <th>Основной контакт</th>
-                  <th>Компания</th>
-                  <th>Статус сделки</th>
-                  <th>Бюджет</th>
-                </tr>
-              </thead>
+            
+            <%if ( request.getParameter("id") != null ) //contacts.jsp?id=x
+            {
+                out.print( views.DealsView.printDealInfo( 
+                        dealsService.getDealById( 
+                        Integer.parseInt( request.getParameter("id") )
+                        ) ) );
+            }
+            else if ( request.getParameter("tag") != null ) //contacts.jsp?tag=x
+            {
+                out.print(views.DealsView.getDealsTable( 
+                        dealsService.getDealsByTag( request.getParameter("tag") 
+                        ) ));
+            }
+            else if ( request.getParameter("status") != null ) //contacts.jsp?status=x
+            {
+                if ( request.getParameter("status").equals("opened") )
+                {
+                    out.println( DealsView.getDealsTable(dealsService.getOpenedDeals()));
+                }
+                else if ( request.getParameter("status").equals("my") )
+                {
+                    //later
+                }
+                else if ( request.getParameter("status").equals("suxes") )
+                {
+                    out.println( DealsView.getDealsTable(dealsService.getDealsByType("success")));
+                }
+                else if ( request.getParameter("status").equals("failed") )     
+                {
+                    out.println( DealsView.getDealsTable(dealsService.getDealsByType("failure")));
+                }
+                else if ( request.getParameter("status").equals("without_tasks") )
+                {
+                    out.println( DealsView.getDealsTable( dealsService.getDealsWithoutTasks() ));
+                }
+            }
+            else      //contacts.jsp
+            {
+                out.print(views.DealsView.getDealsTable( dealsService.findAll() ));
+            }
+            %>
               
-              <%=views.DealsView.getDealsTable(dealsService.findAll())%>
+              <%--<%=views.DealsView.getDealsTable(dealsService.findAll())%>--%>
               
-            </table>
        </div>
       </div>
       <hr>

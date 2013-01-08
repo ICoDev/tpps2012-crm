@@ -71,26 +71,28 @@
         <div class="span3">
           <p class="lead">Компании</p>
           <p><a href="add-company.jsp" class="btn btn-block" target="_blank">Добавить компанию</a></p>
-          <form>
+          <form action="SearchCompanies">
             <div class="input-append">
-              <input type="text" placeholder="Поиск компании" data-provide="typeahead" data-items="4" data-source='["JBS","Beatom","Litera Corp","Nork","Daota","Ohio","Rhodeands","Utaha INC","Vermont","Wyomin"]'>
+                <input type="text" name="name" placeholder="Поиск компании" data-provide="typeahead" data-items="4" data-source='<%=views.СompaniesView.getCompaniesDataSource(companiesServices.findAll())%>'>
               <button class="btn btn-primary" type="submit"><i class="icon-search icon-white"></i></button>
             </div>
           </form>
         </div>
         <div class="span9">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Название компании</th>
-                  <th>Телефон</th>
-                  <th>Адрес</th>
-                </tr>
-              </thead>
               
-              <%=(views.СompaniesView.getCompaniesTable(companiesServices.findAll()))%>
+              <%if ( request.getParameter("id") != null )
+                {
+                    out.print( views.СompaniesView.printCompanyInfo( 
+                            companiesServices.getCompanyById( 
+                            Integer.parseInt( request.getParameter("id") )
+                            ) ) );
+                }
+                else
+                {
+                    out.print(views.СompaniesView.getCompaniesTable(companiesServices.findAll()));
+                }
+              %>
               
-            </table>
        </div>
       </div>
       <hr>

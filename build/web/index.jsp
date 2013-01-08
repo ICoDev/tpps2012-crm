@@ -244,9 +244,9 @@ body {
           <ul class="nav">
               <li><a href="register.jsp">Регистрация</a></li>
           </ul>
-            <form class="navbar-form pull-right">
-              <input class="span2" type="text" placeholder="Email">
-              <input class="span2" type="password" placeholder="Password">
+            <form class="navbar-form pull-right" action="Login">
+              <input class="span2" type="text" placeholder="Email" name="email">
+              <input class="span2" type="password" placeholder="Password" name="password">
               <button type="submit" class="btn btn-inverse">Вход</button>
             </form>
             

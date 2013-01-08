@@ -132,4 +132,14 @@ public class TasksService extends AbstractService<Tasks> {
         
         super.update(task);
     }
+    
+    @Transactional
+    @WebMethod(operationName = "closeTask")
+    public void closeTask(Integer id)
+    {
+        Tasks task = this.getById(id);
+        task.setStatus("completed");
+        
+        super.update(task);
+    }
 }

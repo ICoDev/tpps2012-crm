@@ -73,39 +73,39 @@
         <div class="span3">
           <p class="lead">Задачи</p>
           <p><a href="add-task.jsp" class="btn btn-block" target="_blank">Добавить задачу</a></p>
-          <ul class="nav nav-pills nav-stacked">
-              <li class="active"><a href="#">Все задачи</a></li>
+<!--          <ul class="nav nav-pills nav-stacked">
+              <li class="active"><a href="tasks.jsp">Все задачи</a></li>
               <li><a href="#">Мои задачи</a></li>
               <li><a href="#">Мои просроченные задачи</a></li>
               <li><a href="#">Мои завершенные задачи</a></li>
-          </ul>  
-<form>
-  <h5>Фильтр по сделкам</h5>
+          </ul>  -->
+  <form action="FilterTasks">
+<!--  <h5>Фильтр по сделкам</h5>
       <label>Период</label>
-      <select class="input-block-level">
+      <select class="input-block-level" name="period">
             <option>За все время</option>
             <option>За сегодня</option>
             <option>За 3 дня</option>
             <option>За неделю</option>
             <option>За месяц</option>
             <option>За полгода</option>
-      </select>
+      </select>-->
   <h5>Тип задачи</h5>
   <label class="checkbox"><i class="icon-bell"></i>
-    <input type="checkbox" value="">Звонок
+      <input type="checkbox" value="true" name="call">Звонок
   </label>
   <label class="checkbox"><i class="icon-glass"></i>
-    <input type="checkbox" value="">Встреча
+      <input type="checkbox" value="true" name="meeting">Встреча
   </label>
   <label class="checkbox"><i class="icon-envelope"></i>
-    <input type="checkbox" value="">Письмо
+      <input type="checkbox" value="true" name="mail">Письмо
   </label>
   <h5>Статус задачи</h5>
   <label class="checkbox">
-    <input type="checkbox" value="">Не завершенные
+    <input type="checkbox" value="true" name="notCompleted">Не завершенные
   </label>
   <label class="checkbox">
-    <input type="checkbox" value="">Завершенные
+    <input type="checkbox" value="true" name="completed">Завершенные
   </label>
   <h5>Ответственный</h5>
   
@@ -118,19 +118,9 @@
 </form>
         </div>
         <div class="span9">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Дата исполнения / Ответственный</th>
-                  <th>Объект задачи</th>
-                  <th>Текст задачи</th>
-                  <th></th>
-                </tr>
-              </thead>
               
               <%=TasksView.getTasksTable(tasksService.findAll())%>
               
-            </table>
        </div>
       </div>
       <hr>
@@ -142,4 +132,11 @@
     <script src="js/bootstrap.min.js"></script>
   </body>
 </html>
+
+<!--<script type="text/javascript" >
+    function callClicked()
+    {
+        document.getElementById("call")
+    }
+</script>-->
 

@@ -97,7 +97,7 @@ public class AddTask extends HttpServlet {
 //        dealsService.update(deal);
 //        contactsService.update(contact);
         
-        //response.sendRedirect("tasks.jsp");
+        response.sendRedirect("tasks.jsp");
         
     }
 

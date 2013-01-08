@@ -13,6 +13,7 @@ import javax.jws.WebService;
 import javax.jws.WebMethod;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -50,6 +51,17 @@ public class CompaniesService extends AbstractService<Companies> {
                 .setMaxResults(1).uniqueResult();
         session.close();
         return company;
+    }
+    
+    @WebMethod(operationName = "getCompaniesWhereNameLike")
+    public List<Companies> getCompaniesWhereNameLike(String name)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List <Companies> list = session.createCriteria(Companies.class)
+                .add(Restrictions.like("companyName", name, MatchMode.ANYWHERE ).ignoreCase())
+                .list();
+        session.close();
+        return list;
     }
         
     @WebMethod(operationName = "getCompanyById")

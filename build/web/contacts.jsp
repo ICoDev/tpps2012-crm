@@ -76,20 +76,20 @@
         <div class="span3">
           <p class="lead">Контакты</p>
           <p><a href="add-contact.jsp" class="btn btn-block" target="_blank">Добавить контакт</a></p>
-          <form>
+          <form action="SearchContacts">
           <div class="input-append">
-            <input type="text" placeholder="Поиск контактов">
+            <input type="text" name="name" placeholder="Поиск контактов">
             <button class="btn btn-primary" type="submit"><i class="icon-search icon-white"></i></button>
           </div>
           </form>
           <ul class="nav nav-pills nav-stacked">
-              <li class="active"><a href="#">Все контакты</a></li>
-              <li><a href="#">Контакты без задач</a></li>
-              <li><a href="#">Контакты c просроченными задачами</a></li>
+              <li class="active"><a href="contacts.jsp">Все контакты</a></li>
+              <li><a href="contacts.jsp?filter=withoutTasks">Контакты без задач</a></li>
+              <!--<li><a href="contacts.jsp?filter=outTimeTasks">Контакты c просроченными задачами</a></li>-->
           </ul>
-        <h5>Дополнительная фильтрация</h5>
-<form>
-<label>Создано</label>
+<!--        <h5>Дополнительная фильтрация</h5>
+<form>-->
+<!--<label>Создано</label>
       <select class="input-block-level">
             <option>За все время</option>
             <option>За сегодня</option>
@@ -108,8 +108,8 @@
       <option>В этом квартале</option>
       <option>Нет задач</option>
       <option>Просрочены</option>        
-   </select>
-<h5>Ответственный</h5>
+   </select>-->
+<!--<h5>Ответственный</h5>
 
   <%=views.UsersView.getUsersSelect(usersService.findAll(), "")%>
 
@@ -143,22 +143,28 @@
     <button type="submit" class="btn btn-primary">Найти</button>
     <button type="button" class="btn">Отменить</button>
   </p>
-</form>
+</form>-->
         </div>
         <div class="span9">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Контакт</th>
-                  <th>Компания</th>
-                  <th>Телефон</th>
-                  <th>Email</th>
-                </tr>
-              </thead>
               
-              <%=(views.ContactsView.getContactsTable(contactsService.findAll()))%>
-            
-            </table>
+            <%if ( request.getParameter("id") != null )
+            {
+                out.print( views.ContactsView.printContactInfo( 
+                        contactsService.getContactById( 
+                        Integer.parseInt( request.getParameter("id") )
+                        ) ) );
+            }
+            else if ( request.getParameter("filter") != null )
+            {
+                out.println( views.ContactsView.getContactsTable( contactsService.getContactsWithoutTasks() ) );
+            }
+            else
+            {
+                out.print(views.ContactsView.getContactsTable(contactsService.findAll()));
+            }
+            %>
+              <%--<%=(views.ContactsView.getContactsTable(contactsService.findAll()))%>--%>
+              
        </div>
       </div>
       <hr>

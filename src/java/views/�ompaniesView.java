@@ -38,7 +38,12 @@ public class СompaniesView {
     
     public static String getCompaniesTable(List <Companies> companies)
     {
-        String result = "<tbody>";
+        String result = "<table class=\"table\">"
+            + "<thead>"
+            + "<tr>"
+            + "<th>Название компании</th><th>Телефон</th><th>Адрес</th>"
+            + "</tr>"
+            + "</thead>";
         
         Iterator<Companies> iterator = companies.iterator();
         
@@ -47,20 +52,42 @@ public class СompaniesView {
             Companies company = iterator.next(); 
             
             result += "<tr>";
-            result += "<td><p><a href=\"\">" + company.getCompanyName() + "</a></p></td>";
+            result += "<td><p><a href=\"companies.jsp?id=" + company.getId() + "\">" + company.getCompanyName() + "</a></p></td>";
             result += "<td><span class=\"label label-important\">" + company.getCompanyTelephone() + "</span></td>";
             result += "<td><span class=\"badge\">" + company.getCompanyAddress() + "</span></td>";
             result += "</tr>";
         }
         
-        result += "</tbody>";
+        result += "</tbody>"
+                + "</table>";
         
+        return result;
+    }
+    
+    public static String printCompanyInfo(Companies company)
+    {                          
+        String result = "<h3>" + company.getCompanyName() + "</h3>"
+                + "<br/><br/>";
+        result += "<b>Адресс компании: </b> <span class=\"badge\">" + company.getCompanyAddress() + "</span><br/><br/>";
+        result += "<b>Контактный номер: </b><span class=\"label label-important\">" + company.getCompanyTelephone() + "</span>"
+                + "<br/><br/><br/><br/>";        
+        
+        //now printing companies contacts;
+        if ( company.getContactsSet().isEmpty()  )
+        {
+            result += "<b>Контактов, связанных с компанией " + company.getCompanyName() + " нет</b><br/><br/>";
+        }
+        else
+        {
+            result += "<b>Контакты, связанные с компанией:</b><br/><br/>";
+            result += ContactsView.getContactsTable( company.getContactsSet() );
+        }
+                
         return result;
     }
     
     public static String getCompaniesDataSource(List <Companies> companies)
     {
-        //["JBS","Beatom","Litera Corp","Nork","Daota","Ohio","Rhodeands","Utaha INC","Vermont",]
         String result = "[";
         
         Iterator<Companies> iterator = companies.iterator();
