@@ -223,7 +223,7 @@ public class FilterTasks extends HttpServlet {
 "        <p>&copy; Company 2012</p>\n" +
 "      </footer>\n" +
 "    </div>\n" +
-"    <script src=\"js/jquery.min.js\"></script>\n" +
+"    <script src=\"https://code.jquery.com/jquery-1.12.4.min.js\" integrity=\"sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=\" crossorigin=\"anonymous\"></script>\n" +
 "    <script src=\"js/bootstrap.min.js\"></script>\n" +
 "  </body>\n" +
 "</html>\n" +

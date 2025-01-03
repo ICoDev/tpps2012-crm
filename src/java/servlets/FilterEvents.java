@@ -264,7 +264,7 @@ public class FilterEvents extends HttpServlet {
 "    <!-- Le javascript\n" +
 "    ================================================== -->\n" +
 "    <!-- Placed at the end of the document so the pages load faster -->\n" +
-"    <script src=\"js/jquery.min.js\"></script>\n" +
+"    <script src=\"https://code.jquery.com/jquery-1.12.4.min.js\" integrity=\"sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=\" crossorigin=\"anonymous\"></script>\n" +
 "    <script src=\"js/bootstrap.min.js\"></script>\n" +
 "  </body>\n" +
 "</html>\n" +
